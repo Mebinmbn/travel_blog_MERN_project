@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.highlight-first-letter::first-letter {
+  @apply text-red-500 font-bold text-3xl;
+}
+
+
 .hide-scrollbar {
     scrollbar-width: none; 
     -ms-overflow-style: none; 

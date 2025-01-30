@@ -5,7 +5,7 @@ import { RootState } from "../app/store";
 import { clearUser } from "../app/featrue/userSlice";
 import { toast } from "react-toastify";
 
-const Navbar: React.FC = () => {
+const UserNav: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const user = useSelector((state: RootState) => state.user.user);
   const distpatch = useDispatch();
@@ -48,25 +48,25 @@ const Navbar: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link to="/about" className="hover:text-blue-800">
-              About
+            <Link to="/profile" className="hover:text-blue-800">
+              Profile
             </Link>
           </li>
           <li>
-            <Link to="/blog" className="hover:text-blue-800">
-              Blog
+            <Link to="/user/blogs" className="hover:text-blue-800">
+              My Blogs
             </Link>
           </li>
           <li>
-            <Link to="/contact" className="hover:text-blue-800">
-              Contact
+            <Link to="/create" className="hover:text-blue-800">
+              Create Blog
             </Link>
           </li>
         </ul>
 
         <div className="ml-auto">
           {user && (
-            <Link to="/profile" className="font-bold hover:text-blue-800 mr-5">
+            <Link to="/" className="font-bold hover:text-blue-800 mr-5">
               {user.name}
             </Link>
           )}
@@ -92,4 +92,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default UserNav;

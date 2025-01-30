@@ -11,7 +11,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("userToken");
+    const token = localStorage.getItem("token");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -40,7 +40,7 @@ api.interceptors.response.use(
           { withCredentials: true }
         );
 
-        localStorage.setItem("userToken", data.token);
+        localStorage.setItem("token", data.token);
         api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         return api(originalRequest);
       } catch (err) {

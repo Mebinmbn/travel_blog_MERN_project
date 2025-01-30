@@ -5,11 +5,11 @@ import { toast } from "react-toastify";
 import { IUser } from "./../../../backend/server/src/models/userModel";
 import { RootState } from "../app/store";
 import api from "../api/api";
-import Navbar from "../components/Navbar";
+import UserNav from "../components/UserNav";
 
 interface FormValues {
-  _id?: string;
-  firstName?: string;
+  _id?: string | undefined | unknown;
+  firstName?: string | undefined;
   lastName?: string;
   email?: string;
   phone?: string;
@@ -206,12 +206,12 @@ function Profile() {
     setCurrentPassword("");
   }, []);
   return (
-    <div className="   min-h-screen bg-[##4fc9fa] ">
-      <Navbar />
+    <div className="bg-gray-100 max-w-full min-h-screen overflow-hidden text-center">
+      <UserNav />
 
-      <div className="mt-10 mx-auto w-fit h-fit p-4 rounded-lg shadow-lg">
+      <div className="bg-white mx-auto w-fit h-fit p-4 rounded-lg shadow-lg mt-28">
         <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
-        <div className="flex  justify-center  bg-gray-200 mb-4">
+        <div className="flex  justify-center  bg-white mb-4">
           <form
             onSubmit={handleUpdate}
             className=" p-6 rounded-lg  w-full max-w-2xl"
@@ -300,7 +300,7 @@ function Profile() {
             </div>
 
             <div className="mt-6 flex justify-center">
-              <button className="bg-[#007E85] rounded-lg p-2 text-white w-24 font-bold">
+              <button className="bg-[#4fc9fa] rounded-lg p-2 w-24 font-bold">
                 Update
               </button>
             </div>
@@ -329,7 +329,7 @@ const InputField = ({
     <input
       type="text"
       name={name}
-      className="border-[1px] border-[#007E85] rounded-lg h-10 w-full md:w-[19vw]  mt-1 p-2 font-light focus:outline-none"
+      className="border-[1px] border-[#007E85]  h-10 w-full md:w-[19vw]  mt-1 p-2 font-light focus:outline-none"
       value={value}
       onChange={onChange}
       placeholder={placeholder}
@@ -355,7 +355,7 @@ const PassField = ({
     <input
       type="password"
       name={name}
-      className="border-[1px] border-[#007E85] rounded-lg h-10 w-full md:w-[19vw]  p-2 font-light focus:outline-none"
+      className="border-[1px] border-[#007E85]  h-10 w-full md:w-[19vw]  p-2 font-light focus:outline-none"
       value={value}
       onChange={onChange}
       placeholder={placeholder}

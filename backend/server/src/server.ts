@@ -5,18 +5,10 @@ import cors from "cors";
 import logger from "./config/logger";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
-import patientRoutes from "./routes/patientRoutes";
 import otpRoutes from "./routes/otpRoutes";
-import doctorRoutes from "./routes/doctorRoutes";
-import adminRoutes from "./routes/adminRoutes";
-import notificationRoutes from "./routes/notificationRoutes";
 import tokenRouter from "./routes/tokenRoutes";
-import appointmentRouter from "./routes/appointmentRoutes";
-import medicalRecordRoute from "./routes/medicalRecordRoute";
-import chatRoutes from "./routes/chatRotes";
 import path from "path";
 import { createServer } from "http";
-import { setupSocketIO } from "./services/Socket";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -25,8 +17,6 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 const server = createServer(app);
-
-setupSocketIO(server, app);
 
 dbConnect();
 
@@ -50,15 +40,8 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/patients", patientRoutes);
 app.use("/api/otp", otpRoutes);
-app.use("/api/admin", adminRoutes);
-app.use("/api/notification", notificationRoutes);
-app.use("/api/doctor", doctorRoutes);
 app.use("/api/token", tokenRouter);
-app.use("/api/appointments", appointmentRouter);
-app.use("/api/medicalRecord", medicalRecordRoute);
-app.use("/api/chats", chatRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(`Error: ${err.message}`);
