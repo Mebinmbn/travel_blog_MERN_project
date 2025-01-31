@@ -21,11 +21,12 @@ function MyBlogs() {
   const [totalPages, setTotalPages] = useState(1);
   const [message, setMessage] = useState("");
   const user = useSelector((state: RootState) => state.user.user);
+  const limit = 10;
 
   const fetchBlogs = useCallback(async () => {
     try {
       const response = await api.get(
-        `/users/blogs/${user?.id}?page=${currentPage}&limit=10`
+        `/users/blogs/${user?.id}?page=${currentPage}&${limit}`
       );
       if (response.data.success) {
         setBlogs(response.data.blogs);
@@ -119,21 +120,23 @@ function MyBlogs() {
               ))}
           </tbody>
         </table>
-        <div className="flex justify-center mt-4">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              className={`px-2 py-1 mb-1 ${
-                currentPage === page
-                  ? "bg-blue-500 text-white rounded-full"
-                  : "text-black"
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
+        {totalPages > limit && (
+          <div className="flex justify-center mt-4">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`px-2 py-1 mb-1 ${
+                  currentPage === page
+                    ? "bg-blue-500 text-white rounded-full"
+                    : "text-black"
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       {isEditModalOpen && (
         <EditBlogModal
