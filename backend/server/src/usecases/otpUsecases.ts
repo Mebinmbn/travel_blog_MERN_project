@@ -1,5 +1,6 @@
 import { IEmailService } from "../models/emailModel";
-import AuthRepository from "../repositories/AuthRepository";
+import authRepository from "../repositories/authRepository";
+
 import { generateOTP, verifyOTP } from "../services/otpSerevice";
 
 export const sendVerificationEmail = async (
@@ -9,7 +10,7 @@ export const sendVerificationEmail = async (
 ) => {
   console.log("otpUsecases");
   if (userType === "forgotPass") {
-    const user = await AuthRepository.findUserByEmail(email);
+    const user = await authRepository.findUserByEmail(email);
     console.log("otp usecases patient", user);
     if (!user) {
       throw new Error("Email is not registerd with us");
@@ -31,9 +32,9 @@ export const verifyEmail = async (
   if (isValidOtp) {
     if (isValidOtp) {
       if (userType === "forgotPass") {
-        return await AuthRepository.findUserByEmail(email);
+        return await authRepository.findUserByEmail(email);
       } else {
-        return await AuthRepository.verifyUser(email);
+        return await authRepository.verifyUser(email);
       }
     }
     throw new Error("Invalid OTP");

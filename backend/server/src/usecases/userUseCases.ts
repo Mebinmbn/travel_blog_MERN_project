@@ -19,17 +19,17 @@ export const createUserBlog = async (blogData: IBlog) => {
   }
 };
 
-export const getAllBlogs = async () => {
+export const getAllBlogs = async (page: number, limit: number) => {
   try {
-    return await userRepository.getBlogs();
+    return await userRepository.getBlogs(page, limit);
   } catch (error) {
     throw new Error("Error in fetching blogs");
   }
 };
 
-export const getUserBlogs = async (id: string) => {
+export const getUserBlogs = async (id: string, page: number, limit: number) => {
   try {
-    return await userRepository.fetchUserBlogs(id);
+    return await userRepository.fetchUserBlogs(id, page, limit);
   } catch (error) {
     throw new Error("Error in fetching user blogs");
   }

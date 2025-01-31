@@ -19,19 +19,31 @@ const createBlog = async (blogData: Partial<IBlog>) => {
   return blog;
 };
 
-const getBlogs = async () => {
+const getBlogs = async (page: number, limit: number) => {
   try {
-    return await BlogModel.find()
+    console.log(page, limit);
+    const blogs = await BlogModel.find()
       .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .populate("authorId", "firstName lastName");
+    const totalDocs = await BlogModel.countDocuments();
+    const totalPages = Math.ceil(totalDocs / limit);
+    return { blogs, totalDocs, totalPages };
   } catch (error) {
     throw new Error("Error in fetching blogs");
   }
 };
 
-const fetchUserBlogs = async (id: string) => {
+const fetchUserBlogs = async (id: string, page: number, limit: number) => {
   try {
-    return await BlogModel.find({ authorId: id }).sort({ createdAt: -1 });
+    const blogs = await BlogModel.find({ authorId: id })
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+    const totalDocs = await BlogModel.countDocuments();
+    const totalPages = Math.ceil(totalDocs / limit);
+    return { blogs, totalDocs, totalPages };
   } catch (error) {
     throw new Error("Error in fetchinng user blogs");
   }

@@ -47,28 +47,21 @@ const Navbar: React.FC = () => {
               Home
             </Link>
           </li>
-          <li>
-            <Link to="/about" className="hover:text-blue-800">
-              About
-            </Link>
-          </li>
-          <li>
-            <Link to="/" className="hover:text-blue-800">
-              Blog
-            </Link>
-          </li>
-          <li>
-            <Link to="/" className="hover:text-blue-800">
-              Contact
-            </Link>
-          </li>
         </ul>
 
-        <div className="ml-auto">
+        <div className="ml-auto flex gap-3">
           {user && (
-            <Link to="/profile" className="font-bold hover:text-blue-800 mr-5">
-              {user.name}
-            </Link>
+            <div className="mt-3">
+              <Link
+                to="/profile"
+                className="font-bold hover:text-blue-800 mr-5"
+              >
+                {user.name}
+              </Link>
+              <Link to="/create" className="font-bold hover:text-blue-800 mr-5">
+                Create Blog
+              </Link>
+            </div>
           )}
           {user ? (
             <Link

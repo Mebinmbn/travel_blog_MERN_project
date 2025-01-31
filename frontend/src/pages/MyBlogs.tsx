@@ -7,37 +7,58 @@ import { Blog } from "../types";
 import UserNav from "../components/UserNav";
 import { toast } from "react-toastify";
 import EditBlogModal from "../components/EditBlogModal";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 function MyBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [blogToEdit, setBlogToEdit] = useState<Blog | null>(null);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [confirmationCallback, setConfirmationCallback] = useState<() => void>(
+    () => () => {}
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [message, setMessage] = useState("");
   const user = useSelector((state: RootState) => state.user.user);
 
   const fetchBlogs = useCallback(async () => {
     try {
-      const response = await api.get(`/users/blogs/${user?.id}`);
+      const response = await api.get(
+        `/users/blogs/${user?.id}?page=${currentPage}&limit=10`
+      );
       if (response.data.success) {
         setBlogs(response.data.blogs);
+        setTotalPages(response.data.meta.totalPages);
       }
     } catch (error) {
       console.log(error);
     }
-  }, []);
-  useEffect(() => {
-    fetchBlogs();
   }, []);
 
+  useEffect(() => {
+    fetchBlogs();
+  }, [currentPage]);
+
+  const showConfirmationModal = (message: string, onConfirm: () => void) => {
+    setMessage(message);
+    setIsConfirmModalOpen(true);
+    setConfirmationCallback(() => onConfirm);
+  };
   const handleDelete = async (id: string) => {
-    try {
-      const response = await api.delete(`/users/blogs/${id}`);
-      if (response.data.success) {
-        fetchBlogs();
-        toast.success("Blog deleted Successfully");
+    console.log("handledelete");
+    showConfirmationModal("Do you want to delete?", async () => {
+      try {
+        const response = await api.delete(`/users/blogs/${id}`);
+        if (response.data.success) {
+          fetchBlogs();
+          toast.success("Blog deleted Successfully");
+        }
+        setIsConfirmModalOpen(false);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
 
   const openModal = (index: number) => {
@@ -98,6 +119,21 @@ function MyBlogs() {
               ))}
           </tbody>
         </table>
+        <div className="flex justify-center mt-4">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`px-2 py-1 mb-1 ${
+                currentPage === page
+                  ? "bg-blue-500 text-white rounded-full"
+                  : "text-black"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
       </div>
       {isEditModalOpen && (
         <EditBlogModal
@@ -106,6 +142,16 @@ function MyBlogs() {
           blog={blogToEdit}
         />
       )}
+
+      <ConfirmationModal
+        showModal={isConfirmModalOpen}
+        message={message}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={() => {
+          if (confirmationCallback) confirmationCallback();
+          setIsConfirmModalOpen(false);
+        }}
+      />
     </div>
   );
 }

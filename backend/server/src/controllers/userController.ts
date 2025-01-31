@@ -60,11 +60,16 @@ const createBlog = async (req: Request, res: Response) => {
 
 const getBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs = await getAllBlogs();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 7;
+    const { blogs, totalDocs, totalPages } = await getAllBlogs(page, limit);
     if (blogs) {
-      res
-        .status(200)
-        .json({ success: true, blogs, message: "Blogs fetched successfully" });
+      res.status(200).json({
+        success: true,
+        blogs,
+        meta: { page, limit, totalDocs, totalPages },
+        message: "Blogs fetched successfully",
+      });
     }
   } catch (error: any) {
     const errorMessage = error.message || "An unexpected error occurred";
@@ -75,11 +80,18 @@ const getBlogs = async (req: Request, res: Response) => {
 const getUsersBlogs = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const blogs = await getUserBlogs(id);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const { blogs, totalDocs, totalPages } = await getUserBlogs(
+      id,
+      page,
+      limit
+    );
     if (blogs) {
       res.status(200).json({
         success: true,
         blogs,
+        meta: { page, limit, totalDocs, totalPages },
         message: "successfully feteched user blogs",
       });
     }

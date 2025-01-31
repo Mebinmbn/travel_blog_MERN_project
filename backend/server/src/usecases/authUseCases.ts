@@ -1,5 +1,5 @@
 import { IUser } from "../models/userModel";
-import AuthRepository from "../repositories/AuthRepository";
+import authRepository from "../repositories/authRepository";
 
 import { comparePassword, hashPassword } from "../services/bcryptService";
 import { generateRefreshToken, generateToken } from "../services/tokenService";
@@ -9,12 +9,12 @@ import validation from "../utils/validation";
 export const userRegister = async (user: IUser) => {
   try {
     validation.validateUserSignup(user);
-    const existinguser = await AuthRepository.findUserByEmail(user.email);
+    const existinguser = await authRepository.findUserByEmail(user.email);
     if (existinguser) {
       throw new Error("User already exist with this email");
     }
     user.password = await hashPassword(user.password);
-    const respone = await AuthRepository.createUser(user);
+    const respone = await authRepository.createUser(user);
     console.log(respone);
     return respone;
   } catch (error) {
@@ -23,7 +23,7 @@ export const userRegister = async (user: IUser) => {
 };
 
 export const signInUser = async (email: string, password: string) => {
-  const user = await AuthRepository.findUserByEmail(email);
+  const user = await authRepository.findUserByEmail(email);
   if (!user) {
     throw new Error("User not found");
   } else if (!user.isVerified) {

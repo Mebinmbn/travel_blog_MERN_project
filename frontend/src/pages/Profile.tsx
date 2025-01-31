@@ -300,7 +300,7 @@ function Profile() {
             </div>
 
             <div className="mt-6 flex justify-center">
-              <button className="bg-[#4fc9fa] rounded-lg p-2 w-24 font-bold">
+              <button className="bg-blue-500 w-3/5  p-2 w-24 font-bold hover:bg-blue-300">
                 Update
               </button>
             </div>
