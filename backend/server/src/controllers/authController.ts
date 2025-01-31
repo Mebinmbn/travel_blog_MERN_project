@@ -29,7 +29,7 @@ const signIn = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       token,
-      user: { name: user.firstName, lastName: user.lastName, id: user._id },
+      user: { name: user.firstName, id: user._id },
       message: "Successfully Logged in",
     });
   } catch (error: any) {

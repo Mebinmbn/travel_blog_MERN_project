@@ -1,14 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { config } from "dotenv";
-import UserModel from "../models/userModel";
 
 config();
 
 interface UserPayload extends jwt.JwtPayload {
+  name: string;
   id: string;
-  role: string;
-  isBlocked: boolean;
 }
 interface AuthenticatedRequest extends Request {
   user?: UserPayload;
@@ -30,9 +28,8 @@ const authMiddleware = async (
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload;
 
     req.user = decoded;
-    let user;
 
-    user = await UserModel.findOne({ _id: decoded.id });
+    console.log("middleware touched", req.user);
 
     next();
   } catch (err: any) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 
@@ -6,12 +6,15 @@ import api from "../api/api";
 import { Blog } from "../types";
 import UserNav from "../components/UserNav";
 import { toast } from "react-toastify";
+import EditBlogModal from "../components/EditBlogModal";
 
 function MyBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [blogToEdit, setBlogToEdit] = useState<Blog | null>(null);
   const user = useSelector((state: RootState) => state.user.user);
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = useCallback(async () => {
     try {
       const response = await api.get(`/users/blogs/${user?.id}`);
       if (response.data.success) {
@@ -20,7 +23,7 @@ function MyBlogs() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -36,6 +39,17 @@ function MyBlogs() {
       console.log(error);
     }
   };
+
+  const openModal = (index: number) => {
+    setIsEditModalOpen(true);
+    setBlogToEdit(blogs[index]);
+  };
+
+  const closeModal = useCallback(() => {
+    setIsEditModalOpen(false);
+    setBlogToEdit(null);
+    fetchBlogs();
+  }, [fetchBlogs]);
   return (
     <div className="bg-gray-100 min-h-screen">
       <UserNav />
@@ -67,7 +81,10 @@ function MyBlogs() {
                     {blog.createdAt.toString().slice(0, 10)}
                   </td>
                   <td className="p-2 border-r border-gray-300 text-center">
-                    <button className="bg-blue-500 text-white p-1 px-3 rounded mx-2 ">
+                    <button
+                      className="bg-blue-500 text-white p-1 px-3 rounded mx-2 "
+                      onClick={() => openModal(index)}
+                    >
                       Edit
                     </button>
                     <button
@@ -82,6 +99,13 @@ function MyBlogs() {
           </tbody>
         </table>
       </div>
+      {isEditModalOpen && (
+        <EditBlogModal
+          isOpen={isEditModalOpen}
+          onRequestClose={closeModal}
+          blog={blogToEdit}
+        />
+      )}
     </div>
   );
 }

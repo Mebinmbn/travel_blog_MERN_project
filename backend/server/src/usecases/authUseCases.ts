@@ -1,5 +1,6 @@
 import { IUser } from "../models/userModel";
 import AuthRepository from "../repositories/AuthRepository";
+
 import { comparePassword, hashPassword } from "../services/bcryptService";
 import { generateRefreshToken, generateToken } from "../services/tokenService";
 
@@ -33,11 +34,7 @@ export const signInUser = async (email: string, password: string) => {
   if (!isPasswordValid) {
     throw new Error("Invalid credentials");
   }
-  const token = generateToken(user.id, user.firstName, user.lastName);
-  const refreshToken = generateRefreshToken(
-    user.id,
-    user.firstName,
-    user.lastName
-  );
+  const token = generateToken(user.firstName, user.id);
+  const refreshToken = generateRefreshToken(user.firstName, user.id);
   return { token, refreshToken, user };
 };

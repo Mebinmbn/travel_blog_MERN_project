@@ -6,9 +6,8 @@ import { generateToken } from "../services/tokenService";
 config();
 
 interface User {
+  name: string;
   id: string;
-  role: string;
-  isBlocked: boolean;
 }
 
 const refreshtoken = (req: Request, res: Response): void => {
@@ -19,7 +18,7 @@ const refreshtoken = (req: Request, res: Response): void => {
       res
         .status(401)
         .json({ success: false, message: "No refresh token provided" });
-      return; // Ensure to return after sending the response
+      return;
     }
 
     jwt.verify(
@@ -31,10 +30,10 @@ const refreshtoken = (req: Request, res: Response): void => {
           res
             .status(403)
             .json({ success: false, message: "Invalid refresh token" });
-          return; // Ensure to return after sending the response
+          return;
         }
 
-        const token = generateToken(user.id, user.role, user.isBlocked);
+        const token = generateToken(user.name, user.id);
         res.json({ token });
       }
     );

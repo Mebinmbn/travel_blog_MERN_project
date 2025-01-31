@@ -1,5 +1,6 @@
 import BlogModel, { IBlog } from "../models/blogModel";
 import UserModel from "../models/userModel";
+import { Blog } from "../utils/types";
 
 const fetchUserDetails = async (id: string) => {
   try {
@@ -44,10 +45,29 @@ const deleteBlog = async (id: string) => {
   }
 };
 
+const updateBlog = async (blogData: Partial<Blog>) => {
+  console.log("blog data in repo", blogData);
+
+  const updateField: Partial<Blog> = {
+    title: blogData.title,
+    content: blogData.content,
+  };
+  if (blogData.imageUrl) {
+    updateField.imageUrl = blogData.imageUrl;
+  }
+  const blog = await BlogModel.findOneAndUpdate(
+    { _id: blogData._id },
+    { $set: updateField },
+    { new: true }
+  );
+  return blog;
+};
+
 export default {
   fetchUserDetails,
   createBlog,
   getBlogs,
   fetchUserBlogs,
   deleteBlog,
+  updateBlog,
 };

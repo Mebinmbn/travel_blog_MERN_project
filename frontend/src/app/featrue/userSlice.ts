@@ -2,9 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface User {
   name: string;
-  user: string;
   id: string;
-  isBlocked: boolean;
 }
 
 interface AuthState {

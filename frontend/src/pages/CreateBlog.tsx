@@ -81,7 +81,7 @@ function CreateBlog() {
         withCredentials: true,
       });
       toast.success("Blog created successfully!");
-      navigate("/blogs");
+      navigate("/");
     } catch (error) {
       console.log(error);
       toast.error("Failed to create blog. Please try again.");

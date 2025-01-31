@@ -6,6 +6,8 @@ import Profile from "./pages/Profile";
 import CreateBlog from "./pages/CreateBlog";
 import Blog from "./pages/Blog";
 import MyBlogs from "./pages/MyBlogs";
+import ProtectedRoute from "./ProtectedRoute";
+import ErrorPage from "./pages/ErrorPage";
 
 function App() {
   return (
@@ -15,10 +17,23 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Signup />} />
           <Route path="/otp" element={<OtpVerification />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/create" element={<CreateBlog />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/user/blogs" element={<MyBlogs />} />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute children={<Profile />} />}
+          />
+          <Route
+            path="/create"
+            element={<ProtectedRoute children={<CreateBlog />} />}
+          />
+          <Route
+            path="/blog"
+            element={<ProtectedRoute children={<Blog />} />}
+          />
+          <Route
+            path="/user/blogs"
+            element={<ProtectedRoute children={<MyBlogs />} />}
+          />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
     </>

@@ -1,5 +1,6 @@
 import { IBlog } from "../models/blogModel";
 import userRepository from "../repositories/userRepository";
+import { Blog } from "../utils/types";
 
 export const getUser = async (id: string) => {
   try {
@@ -39,5 +40,14 @@ export const deleteUserBlog = async (id: string) => {
     return await userRepository.deleteBlog(id);
   } catch (error) {
     throw new Error("Error in deleting blog");
+  }
+};
+
+export const updateUserBlog = async (blogData: Partial<Blog>) => {
+  console.log("userUsecases", blogData);
+  try {
+    return await userRepository.updateBlog(blogData);
+  } catch (error) {
+    throw new Error("Error in blog creation");
   }
 };

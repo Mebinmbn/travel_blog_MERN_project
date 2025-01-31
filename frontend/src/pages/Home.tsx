@@ -35,7 +35,7 @@ function Home() {
             blogs.map((blog, index) => (
               <div
                 key={index}
-                className="flex gap-5 border-b-2 mb-2 cursor-pointer"
+                className="flex gap-5 border-b-2 mb-2 cursor-pointer bg-gray-200"
                 onClick={() => handleSelectedBlog(blog)}
               >
                 <img
