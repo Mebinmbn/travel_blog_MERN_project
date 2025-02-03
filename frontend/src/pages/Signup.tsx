@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useState } from "react";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
 import background from "../assets/login_background.jpg";
 import image from "../assets/login_image.jpg";
 import { toast } from "react-toastify";
@@ -7,7 +7,8 @@ import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import { setUser } from "../app/featrue/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 interface FormValues {
   firstName: string;
@@ -47,6 +48,13 @@ function Signup() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  });
 
   const nameRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -111,7 +119,7 @@ function Signup() {
 
         console.log("User created:", response.data);
         toast.success("Account created, please verify your account");
-
+        setLoading(true);
         await axios.post(
           "http://localhost:8080/api/otp/send",
           {

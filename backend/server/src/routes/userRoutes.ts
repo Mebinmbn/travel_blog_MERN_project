@@ -14,7 +14,7 @@ router.post(
   userController.createBlog
 );
 
-router.get("/blogs", authMiddleware, userController.getBlogs);
+router.get("/blogs", userController.getBlogs);
 
 router.get("/blogs/:id", authMiddleware, userController.getUsersBlogs);
 
